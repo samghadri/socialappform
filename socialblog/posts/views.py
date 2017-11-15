@@ -1,16 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
-from django.htttp import Http404
-from braces.views import SelectRelatedMixins
+from django.http import Http404
+from braces.views import SelectRelatedMixin
 from . import models
 from . import forms
 from django.contrib.auth import get_user_model
 User = get_user_model
 
 
-class PostList(SelectRelatedMixins,generic.ListView):
-    model = Post
+class PostList(SelectRelatedMixin,generic.ListView):
+    model = models.Post
     select_related = ('user','group')
 
 
@@ -32,7 +32,7 @@ class UserPost(generic.ListView):
         return context
 
 
-class PostDetail(SelectRelatedMixins,generic.DetailView):
+class PostDetail(SelectRelatedMixin,generic.DetailView):
     model = models.Post
     select_related = ('user','group')
 
@@ -41,7 +41,7 @@ class PostDetail(SelectRelatedMixins,generic.DetailView):
         return queryset.filter(user__username__iexact=self.kwargs.get('username'))
 
 
-class CreatePost(LoginRequiredMixin,SelectRelatedMixins,generic.CreateView):
+class CreatePost(LoginRequiredMixin,SelectRelatedMixin,generic.CreateView):
     fields = ('message','group')
     model = models.Post
 
@@ -51,7 +51,7 @@ class CreatePost(LoginRequiredMixin,SelectRelatedMixins,generic.CreateView):
         self.object.save()
         return super().form_valid(form)
 
-class DeletePost(LoginRequiredMixin,SelectRelatedMixins,generic.DeleteView):
+class DeletePost(LoginRequiredMixin,SelectRelatedMixin,generic.DeleteView):
     model = models.Post
     select_related = ('user','group')
     success_url = reverse_lazy('posts:all')
