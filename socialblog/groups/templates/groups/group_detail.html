@@ -19,7 +19,7 @@
 {% block group_content %}
 <div class="col-md-8">
   {% if group.posts.count == 0 %}
-  <h2>THERE ARE NO POSTS IN THIS GROUP YET</h2>
+  <h2>THERE ARE NO POSTS IN THIS GROUP YET!</h2>
   {% else %}
   {% for post in group.posts.all  %}
   {% include "posts/_post.html" %}
